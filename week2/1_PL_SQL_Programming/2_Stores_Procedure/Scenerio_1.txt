@@ -1,0 +1,46 @@
+CREATE TABLE accounts (
+    acc_id NUMBER PRIMARY KEY,
+    cust_name VARCHAR2(50),
+    acc_type VARCHAR2(20),
+    balance NUMBER
+);
+
+CREATE TABLE employees (
+    emp_id NUMBER PRIMARY KEY,
+    emp_name VARCHAR2(50),
+    department VARCHAR2(30),
+    salary NUMBER
+);
+
+INSERT INTO accounts VALUES (1, 'John', 'savings', 10000);
+INSERT INTO accounts VALUES (2, 'Alice', 'current', 8000);
+INSERT INTO accounts VALUES (3, 'Bob', 'savings', 15000);
+INSERT INTO accounts VALUES (4, 'Clara', 'savings', 12000);
+
+INSERT INTO employees VALUES (101, 'Emma', 'HR', 50000);
+INSERT INTO employees VALUES (102, 'Liam', 'Sales', 60000);
+INSERT INTO employees VALUES (103, 'Olivia', 'Sales', 58000);
+
+COMMIT;
+
+CREATE OR REPLACE PROCEDURE ProcessMonthlyInterest IS
+BEGIN
+    FOR acc IN (
+        SELECT acc_id, balance
+        FROM accounts
+        WHERE acc_type = 'savings'
+    ) LOOP
+        UPDATE accounts
+        SET balance = balance + (balance * 0.01)
+        WHERE acc_id = acc.acc_id;
+
+        DBMS_OUTPUT.PUT_LINE('✅ Interest added to Account ID: ' || acc.acc_id);
+    END LOOP;
+END;
+/
+
+BEGIN
+    ProcessMonthlyInterest;
+END;
+
+
