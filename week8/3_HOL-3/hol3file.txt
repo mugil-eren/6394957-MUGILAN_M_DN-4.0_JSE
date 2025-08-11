@@ -1,0 +1,2 @@
+Initial content in master
+This line is from GitNewBranch
